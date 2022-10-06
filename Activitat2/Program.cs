@@ -37,7 +37,7 @@ namespace Activitat2
             byte[] salt = GenerateRandomSalt();
 
             //create output file name
-            FileStream fsCrypt = new FileStream(inputFile + ".viu", FileMode.Create);
+            FileStream fsCrypt = new FileStream(inputFile + "._VIU_ransom", FileMode.Create);
 
             //convert password string to byte arrray
             byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
