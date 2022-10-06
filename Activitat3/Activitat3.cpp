@@ -1,10 +1,28 @@
-// Actividad3.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// Activitat3.cpp : Defines the entry point for the application.
 //
 
 #include <iostream>
 #include <windows.h>
 #include <tlhelp32.h>
 
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPWSTR    lpCmdLine,
+                     _In_ int       nCmdShow)
+{
+
+    MessageBoxA(NULL, (LPCSTR)"Soy un supermalware, esconde tus datos!", "¡Hola clase!", MB_OK | MB_ICONWARNING);
+
+    pregunta1();
+
+    pregunta2();
+
+    pregunta3();
+
+    return 0;
+}
+
+    
 void pregunta1()
 {
     HANDLE hProcessSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -25,7 +43,7 @@ void pregunta1()
     {
         if (lstrcmpW(pe32M.szExeFile, TEXT("vmtoolsd.exe")) == 0 || lstrcmpW(pe32M.szExeFile, TEXT("VBoxService.exe")) == 0)
         {
-            printf(" [LOG]: hahah! Maquina virtual detectada!\n");
+            MessageBoxA(NULL, (LPCSTR)"hahah! Maquina virtual detectada!", "¡Hola clase!", MB_OK | MB_ICONWARNING);
             break;
         }
     } while (Process32Next(hProcessSnapshot, &pe32M));
@@ -39,7 +57,8 @@ void pregunta1()
 void pregunta2()
 {
 
-    printf(" [LOG]: Donde me escondere?\n");
+    MessageBoxA(NULL, (LPCSTR)"Donde me escondere? Quiero sobrevivir el reinicio!", "¡Hola clase!", MB_OK | MB_ICONWARNING);
+
 
     HKEY key = 0;
 
@@ -65,7 +84,8 @@ void pregunta2()
 void pregunta3()
 {
 
-    printf(" [LOG]: En los recursos encontraras un tesoro\n");
+    MessageBoxA(NULL, (LPCSTR)"En los recursos encontraras un tesoro", "¡Hola clase!", MB_OK | MB_ICONWARNING);
+
 
 
     HRSRC hRes = FindResource(NULL, TEXT("tesoro"), RT_RCDATA);
@@ -95,15 +115,3 @@ void pregunta3()
     return;
 }
 
-int main()
-{
-    printf(" [LOG]: Soy un supermalware, esconde tus datos!\n");
-
-    pregunta1();
-
-    pregunta2();
-
-    pregunta3();
-
-    return 0;
-}

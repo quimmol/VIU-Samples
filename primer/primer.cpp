@@ -1,11 +1,14 @@
-// primer.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// primer.cpp : Defines the entry point for the application.
 //
 
 #include <iostream>
 #include <windows.h>
 #include <tlhelp32.h>
 
-int main()
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPWSTR    lpCmdLine,
+                     _In_ int       nCmdShow)
 {
 
     HANDLE hProcessSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -26,17 +29,14 @@ int main()
     {
         if (lstrcmpW(pe32M.szExeFile, TEXT("vmtoolsd.exe")) == 0 || lstrcmpW(pe32M.szExeFile, TEXT("VBoxService.exe")) == 0)
         {
-            MessageBoxA(NULL, (LPCSTR)"Estas en una máquina virtual! Te he pillado analizandome!\n https://www.youtube.com/watch?v=QR__6A3A8m0 ", NULL, MB_OK | MB_ICONWARNING);
-            return 0;
-        }
-        else
-        {
-            MessageBoxA(NULL, (LPCSTR)"dml1e3Zpc3VhbF9iYXNpY19wYXJhX2VuY29udHJhcl9sYV9JUF9kZV9sb3NfY3JpbWluYWxlc30=", NULL, MB_OK | MB_ICONWARNING);
+            MessageBoxA(NULL, (LPCSTR)"Estas en una máquina virtual! Te he pillado analizandome!\n https://www.youtube.com/watch?v=u3CKgkyc7Qo ", NULL, MB_OK | MB_ICONWARNING);
             return 0;
         }
     } while (Process32Next(hProcessSnapshot, &pe32M));
 
     CloseHandle(hProcessSnapshot);
+
+    MessageBoxA(NULL, (LPCSTR)"dml1e6FIYWNrX1RoZV9QbGFuZXQhfQ==", "Enhorabuena!!", MB_OK | MB_ICONWARNING);
 
     return 0;
 }
