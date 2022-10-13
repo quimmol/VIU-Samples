@@ -1,20 +1,43 @@
-// segon.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include <windows.h>
+#include <tlhelp32.h>
 
-int main()
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPWSTR    lpCmdLine,
+    _In_ int       nCmdShow)
 {
-    std::cout << "Hello World!\n";
+
+    HANDLE hProcessSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hProcessSnapshot == INVALID_HANDLE_VALUE)
+    {
+        exit(0);
+    }
+
+    PROCESSENTRY32 pe32M;
+    pe32M.dwSize = sizeof(PROCESSENTRY32);
+
+    if (!Process32First(hProcessSnapshot, &pe32M))
+    {
+        exit(0);
+    }
+
+    do
+    {
+        if (lstrcmpW(pe32M.szExeFile, TEXT("vmtoolsd.exe")) == 0 || lstrcmpW(pe32M.szExeFile, TEXT("VBoxService.exe")) == 0)
+        {
+            MessageBoxA(NULL, (LPCSTR)"Estas en una máquina virtual! Te he pillado analizandome!\n https://www.youtube.com/watch?v=u3CKgkyc7Qo ", NULL, MB_OK | MB_ICONWARNING);
+            return 0;
+        }
+    } while (Process32Next(hProcessSnapshot, &pe32M));
+
+    CloseHandle(hProcessSnapshot);
+
+    return 0;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+#pragma comment(linker, "/export:donde_estoy")
+void donde_estoy() 
+{
+    MessageBoxA(NULL, (LPCSTR)"dml1e6FIYWNrX1RoZV9QbGFuZXQhfQ==", "Enhorabuena!!", MB_OK | MB_ICONWARNING);
+}
