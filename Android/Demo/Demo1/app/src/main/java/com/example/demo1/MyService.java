@@ -7,10 +7,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.Random;
-
 public class MyService extends Service {
-
     MyBinder binder = new MyBinder();
     private String TAG = "MyService";
 
@@ -29,7 +26,7 @@ public class MyService extends Service {
 
         try {
             Thread.sleep(3000);
-            Toast.makeText(this, "Bienvenido al mundo de los servicios", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Bienvenido al mundo de los servicios", Toast.LENGTH_LONG).show();
         } catch (InterruptedException e) {
             Log.e(TAG, e.toString());
         }
