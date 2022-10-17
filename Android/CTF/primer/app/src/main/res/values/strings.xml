@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name" translatable="false">primer</string>
+    <string name="secret">dml1e0ltX1BpY2tsZV9SaWNrIX0=</string>
+    <string name="user">viu</string>
+</resources>
