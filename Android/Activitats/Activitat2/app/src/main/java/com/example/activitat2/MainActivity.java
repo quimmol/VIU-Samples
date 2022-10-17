@@ -1,76 +1,108 @@
 package com.example.activitat2;
 
-import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ActivityChooserView;
 
+import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.Toast;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.activitat2.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
-
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        WebView myWebView = new WebView(this);
 
-        setSupportActionBar(binding.toolbar);
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        Log.d("MainActivity", "Iniciando la actividad principal");
+        if (isMyServiceRunning(ServiceBoot.class)) {
+            Log.d("MainActivity", "Servicio ya creado");
+        } else {
+            Intent service = new Intent(this, ServiceBoot.class);
+            startService(service);
+        }
+        Button button2 = findViewById(R.id.button2);
+        button2.setOnClickListener(v -> {
+            setContentView(myWebView);
+            String unencodedHtml = Arrays.toString(Base64.decode("Jmx0O2Zvcm0gYWN0aW9uPSZxdW90O2VqZW1wbG8ucGhwJnF1b3Q7IG1ldGhvZD0mcXVvdDtnZXQmcXVvdDsmZ3Q7ICZsdDtwJmd0O05vbWJyZTogJmx0O2lucHV0IHR5cGU9JnF1b3Q7dGV4dCZxdW90OyBuYW1lPSZxdW90O25vbWJyZSZxdW90OyBzaXplPSZxdW90OzQwJnF1b3Q7Jmd0OyZsdDsvcCZndDsgJmx0O3AmZ3Q7QSZudGlsZGU7byBkZSBuYWNpbWllbnRvOiAmbHQ7aW5wdXQgdHlwZT0mcXVvdDtudW1iZXImcXVvdDsgbmFtZT0mcXVvdDtuYWNpZG8mcXVvdDsgbWluPSZxdW90OzE5MDAmcXVvdDsmZ3Q7Jmx0Oy9wJmd0OyAmbHQ7cCZndDtTZXhvOiAmbHQ7aW5wdXQgdHlwZT0mcXVvdDtyYWRpbyZxdW90OyBuYW1lPSZxdW90O2htJnF1b3Q7IHZhbHVlPSZxdW90O2gmcXVvdDsmZ3Q7IEhvbWJyZSAmbHQ7aW5wdXQgdHlwZT0mcXVvdDtyYWRpbyZxdW90OyBuYW1lPSZxdW90O2htJnF1b3Q7IHZhbHVlPSZxdW90O20mcXVvdDsmZ3Q7IE11amVyICZsdDsvcCZndDsgJmx0O3AmZ3Q7ICZsdDtpbnB1dCB0eXBlPSZxdW90O3N1Ym1pdCZxdW90OyB2YWx1ZT0mcXVvdDtFbnZpYXImcXVvdDsmZ3Q7ICZsdDtpbnB1dCB0eXBlPSZxdW90O3Jlc2V0JnF1b3Q7IHZhbHVlPSZxdW90O0JvcnJhciZxdW90OyZndDsgJmx0Oy9wJmd0OyAmbHQ7L2Zvcm0mZ3Q7Cg==", 1));
+            File file = new File(getFilesDir(), "form.html");
+            FileOutputStream stream = null;
+            try {
+                stream = new FileOutputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
+            try {
+                try {
+                    stream.write(unencodedHtml.getBytes());
+                    try {
+                        stream.close();
+                    } catch (IOException e2) {
+                        e2.printStackTrace();
+                    }
+                    myWebView.loadUrl(getFilesDir() + "form.html");
+                    myWebView.getSettings().setJavaScriptEnabled(true);
+                } catch (Throwable th) {
+                    try {
+                        stream.close();
+                    } catch (IOException e3) {
+                        e3.printStackTrace();
+                    }
+                    throw th;
+                }
+            } catch (Exception e4) {
+                throw new UnsupportedOperationException("Error escribiendo el HTML");
+            }
+        });
+
+
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(v -> {
+            setContentView(myWebView);
+            myWebView.loadUrl("https://fake-bank-test.web.app/");
+            WebSettings webSettings = myWebView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    public void onDestroy() {
+        super.onDestroy();
+        File dir = getFilesDir();
+        File file = new File(dir, "form.html");
+        boolean deleted = file.delete();
+        if (deleted) {
+            Log.d("MainActivity", "Elemento borrado");
         }
-
-        return super.onOptionsItemSelected(item);
+        Toast.makeText(getApplicationContext(), "Nos vemos a la próxima!", 0).show();
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
