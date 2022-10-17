@@ -16,18 +16,20 @@ public class MyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+       Log.d("MyReceiver","result");
        String result = intent.getAction();
 
        Log.d("MyReceiver",result);
 
        switch (result)
        {
-           case "com.example.demo2.SOME_ACTION":
+           case "com.example.d2.SOME_ACTION":
                Toast.makeText(context, "Estas haciendo algo?", Toast.LENGTH_LONG).show();
-           case "com.example.demo2.GET_IP":
-               Toast.makeText(context, getMobileIP(), Toast.LENGTH_LONG).show();
 
+           case "com.example.d2.GET_IP":
+               Toast.makeText(context, getMobileIP(), Toast.LENGTH_LONG).show();
                Log.d("MyReceiver",getMobileIP());
+
            default:
                Toast.makeText(context, "LONG LIVE RICK & MORTY", Toast.LENGTH_LONG).show();
 

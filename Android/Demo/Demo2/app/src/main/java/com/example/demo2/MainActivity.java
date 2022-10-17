@@ -1,6 +1,7 @@
 package com.example.demo2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         stopService(new Intent( this, MyService.class ) );
+
     }
 
 
